@@ -6,6 +6,7 @@ import es.marcosar.proyectobackend.repository.ProductRepository;
 import es.marcosar.proyectobackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -19,8 +20,8 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     private UserRepository userRepository;
 
-    // @Autowired
-    // private PasswordEncoder passwordEncoder; // Si usas hasheo
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
@@ -35,20 +36,11 @@ public class DataInitializer implements CommandLineRunner {
 
         // Crear Usuarios si no existen
         if (userRepository.count() == 0) {
-            // String adminPassword = passwordEncoder.encode("admin"); // Hashear
-            // String managerPassword = passwordEncoder.encode("manager");
-            // String userPassword = passwordEncoder.encode("user");
-
-            // Temporalmente sin hashear:
-            String adminPassword = "admin";
-            String managerPassword = "manager";
-            String userPassword = "user";
-
-            User admin = new User(null, "admin", adminPassword, User.Role.ADMIN, "Admin Supremo");
-            User manager = new User(null, "manager", managerPassword, User.Role.MANAGER, "Jefe de Tienda");
-            User user = new User(null, "user", userPassword, User.Role.USER, "Cliente Fiel");
+            User admin = new User(null, "admin", passwordEncoder.encode("admin"), User.Role.ADMIN, "Admin Supremo");
+            User manager = new User(null, "manager", passwordEncoder.encode("manager"), User.Role.MANAGER, "Jefe de Tienda");
+            User user = new User(null, "user", passwordEncoder.encode("user"), User.Role.USER, "Cliente Fiel");
             userRepository.saveAll(Arrays.asList(admin, manager, user));
-            System.out.println(">>> Usuarios de prueba creados.");
+            System.out.println(">>> Usuarios de prueba (con contraseñas hasheadas) creados.");
         }
     }
 }
