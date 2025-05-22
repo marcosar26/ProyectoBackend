@@ -70,6 +70,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/products/**").hasAnyAuthority("ADMIN", "MANAGER")
                         .requestMatchers(HttpMethod.DELETE, "/api/products/**").hasAnyAuthority("ADMIN", "MANAGER")
                         .requestMatchers("/api/users/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/stock-movements/**").hasAnyAuthority("ADMIN", "MANAGER")
                         .anyRequest().authenticated()
                 );
 
