@@ -144,4 +144,14 @@ public class ProductService {
         }
         return false;
     }
+
+    @Transactional(readOnly = true)
+    public long countTotalProducts() {
+        return productRepository.count();
+    }
+
+    @Transactional(readOnly = true)
+    public long countLowStockProducts(int threshold) {
+        return productRepository.countByStockLessThan(threshold);
+    }
 }

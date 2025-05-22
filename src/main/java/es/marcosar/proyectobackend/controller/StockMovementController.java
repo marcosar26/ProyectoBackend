@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -43,5 +45,26 @@ public class StockMovementController {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(movementDTOs);
+    }
+
+    @GetMapping("/stats/movements-by-type")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    public ResponseEntity<List<Map<String, Object>>> getMovementsByTypeLast30Days() {
+        // Necesitarías un método en StockMovementService que agrupe por tipo y cuente
+        // Esto puede ser una consulta JPQL o Criteria API más compleja.
+        // Ejemplo de lo que devolvería el servicio: List<Map<String, Object>> donde cada mapa es {"type": "ENTRADA", "count": 25}
+        List<Map<String, Object>> stats = stockMovementService.countMovementsByTypeLastDays(30);
+        return ResponseEntity.ok(stats);
+    }
+
+    @GetMapping("/stats/summary-last-week")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    public ResponseEntity<Map<String, Long>> getStockMovementSummaryLastWeek() {
+        Map<String, Long> summary = stockMovementService.getMovementSummaryForPeriod(
+                LocalDate.now().minusWeeks(1),
+                LocalDate.now()
+        );
+        // El summary podría ser: {"totalEntradas": 50, "totalSalidas": 30}
+        return ResponseEntity.ok(summary);
     }
 }

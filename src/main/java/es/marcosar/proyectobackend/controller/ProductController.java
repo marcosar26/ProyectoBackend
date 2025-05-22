@@ -9,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/products") // Ruta base para los productos
@@ -54,5 +56,19 @@ public class ProductController {
             return ResponseEntity.noContent().build(); // 204 No Content
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/stats")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    public ResponseEntity<Map<String, Object>> getProductStats() {
+        Map<String, Object> stats = new HashMap<>();
+        long totalProducts = productService.countTotalProducts(); // Necesitarás añadir este método a ProductService y ProductRepository
+        long lowStockCount = productService.countLowStockProducts(10); // Productos con stock < 10 (necesitas añadir método)
+        // Podrías añadir más: valor total del inventario, producto más caro/barato, etc.
+
+        stats.put("totalProducts", totalProducts);
+        stats.put("lowStockProducts", lowStockCount);
+        // ... más stats
+        return ResponseEntity.ok(stats);
     }
 }
