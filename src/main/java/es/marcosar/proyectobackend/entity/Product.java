@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // O GenerationType.SEQUENCE si prefieres
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "El nombre es obligatorio")
@@ -36,6 +36,6 @@ public class Product {
     @Column(nullable = false)
     private Integer stock;
 
-    @Column(length = 2048) // URL puede ser larga
+    @Column(length = 2048)
     private String imageUrl;
 }

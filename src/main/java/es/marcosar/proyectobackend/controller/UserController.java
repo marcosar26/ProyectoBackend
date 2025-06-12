@@ -16,14 +16,12 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
-// @CrossOrigin(origins = "http://localhost:4200")
 @PreAuthorize("hasAuthority('ADMIN')")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    // Convertir User a UserResponseDTO
     private UserResponseDTO convertToDTO(User user) {
         return new UserResponseDTO(user);
     }
@@ -43,16 +41,12 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Nota: Este endpoint crea un usuario con contraseña.
-    // En un sistema real, el login sería un endpoint separado (/api/auth/login)
-    // que verifica credenciales y devuelve un token (JWT).
-    // El CRUD de usuarios sería para administradores.
     @PostMapping
     public ResponseEntity<?> createUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
         try {
             User user = new User();
             user.setUsername(userRequestDTO.username);
-            user.setPassword(userRequestDTO.password); // Sin hashear por ahora
+            user.setPassword(userRequestDTO.password);
             user.setRole(userRequestDTO.role);
             user.setName(userRequestDTO.name);
             User createdUser = userService.createUser(user);
@@ -65,14 +59,11 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDTO userRequestDTO) {
-        // Para la actualización, la contraseña en UserRequestDTO podría ser opcional
-        // si el DTO se ajusta o se maneja la lógica en el servicio.
         try {
             User userDetails = new User();
             userDetails.setUsername(userRequestDTO.username);
-            // Solo actualizar contraseña si se proporciona en el DTO
             if (userRequestDTO.password != null && !userRequestDTO.password.isEmpty()) {
-                userDetails.setPassword(userRequestDTO.password); // Sin hashear por ahora
+                userDetails.setPassword(userRequestDTO.password);
             }
             userDetails.setRole(userRequestDTO.role);
             userDetails.setName(userRequestDTO.name);

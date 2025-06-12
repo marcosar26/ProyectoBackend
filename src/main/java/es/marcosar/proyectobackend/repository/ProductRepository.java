@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    long count(); // Ya viene de JpaRepository
+    long count();
 
     long countByStockLessThan(Integer stockThreshold);
 }

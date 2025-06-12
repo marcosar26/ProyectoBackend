@@ -15,9 +15,6 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    // @Autowired
-    // private PasswordEncoder passwordEncoder; // Descomentar si usas Spring Security
-
     @Transactional(readOnly = true)
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -38,8 +35,6 @@ public class UserService {
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new IllegalArgumentException("El nombre de usuario '" + user.getUsername() + "' ya está en uso.");
         }
-        // En un sistema real, hashear la contraseña ANTES de guardarla
-        // user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -59,12 +54,8 @@ public class UserService {
                     if (userDetails.getRole() != null) {
                         existingUser.setRole(userDetails.getRole());
                     }
-                    // Actualización de contraseña (si se provee y es diferente)
-                    // Considerar lógica para no actualizar si la contraseña está vacía en la petición
                     if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
-                        // En un sistema real, hashear la nueva contraseña
-                        // existingUser.setPassword(passwordEncoder.encode(userDetails.getPassword()));
-                        existingUser.setPassword(userDetails.getPassword()); // Temporalmente sin hashear
+                        existingUser.setPassword(userDetails.getPassword());
                     }
                     return userRepository.save(existingUser);
                 });
@@ -72,7 +63,6 @@ public class UserService {
 
     @Transactional
     public boolean deleteUser(Long id) {
-        // Podrías añadir lógica para no permitir eliminar al último admin, o al usuario logueado.
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
             return true;

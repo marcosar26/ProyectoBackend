@@ -19,7 +19,7 @@ public class StockMovement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY) // Muchos movimientos pueden estar asociados a un producto
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     @NotNull
     private Product product;
@@ -27,40 +27,40 @@ public class StockMovement {
     @NotNull(message = "El tipo de movimiento es obligatorio")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private MovementType type; // ENTRADA, SALIDA, AJUSTE_INICIAL, CORRECCION
+    private MovementType type;
 
     @NotNull(message = "La cantidad es obligatoria")
     @Column(nullable = false)
-    private Integer quantityChanged; // Cantidad que se sumó o restó. Positivo para entrada, negativo para salida.
+    private Integer quantityChanged;
 
     @Column(nullable = false)
-    private Integer stockBefore; // Stock antes del movimiento
+    private Integer stockBefore;
 
     @Column(nullable = false)
-    private Integer stockAfter; // Stock después del movimiento
+    private Integer stockAfter;
 
     @NotNull(message = "La fecha del movimiento es obligatoria")
     @Column(nullable = false)
     private LocalDateTime movementDate;
 
     @Column(length = 255)
-    private String reason; // Motivo del movimiento (ej. "Venta ID:123", "Compra a proveedor X", "Ajuste de inventario")
+    private String reason;
 
-    @ManyToOne(fetch = FetchType.LAZY) // Opcional: qué usuario realizó el movimiento
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user; // El usuario que registró el movimiento
-
-    public enum MovementType {
-        ENTRADA,      // Ingreso de stock (compra, devolución de cliente)
-        SALIDA,       // Salida de stock (venta, merma)
-        AJUSTE_INICIAL, // Stock inicial al crear el producto
-        CORRECCION    // Ajuste manual de inventario
-    }
+    private User user;
 
     @PrePersist
     protected void onCreate() {
         if (this.movementDate == null) {
             this.movementDate = LocalDateTime.now();
         }
+    }
+
+    public enum MovementType {
+        ENTRADA,
+        SALIDA,
+        AJUSTE_INICIAL,
+        CORRECCION
     }
 }

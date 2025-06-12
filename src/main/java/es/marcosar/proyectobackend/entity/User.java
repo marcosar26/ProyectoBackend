@@ -28,12 +28,11 @@ public class User {
 
     @NotBlank(message = "La contraseña es obligatoria")
     @Size(min = 2, message = "La contraseña debe tener al menos 2 caracteres")
-    // En un sistema real, se almacenaría hasheada
     @Column(nullable = false)
-    private String password; // ¡¡¡IMPORTANTE: Esto debería estar hasheado en un sistema real!!!
+    private String password;
 
     @NotNull(message = "El rol es obligatorio")
-    @Enumerated(EnumType.STRING) // Almacena el enum como String ('ADMIN', 'MANAGER', 'USER')
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private Role role;
 
@@ -41,7 +40,6 @@ public class User {
     @Column(length = 100)
     private String name;
 
-    // Enum para los roles
     public enum Role {
         ADMIN, MANAGER, USER
     }

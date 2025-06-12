@@ -25,7 +25,6 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Crear Productos si no existen
         if (productRepository.count() == 0) {
             Product p1 = new Product(null, "Laptop Pro X desde Backend", "Potente laptop para profesionales", 1250.00, 12, "https://via.placeholder.com/150/0000FF/808080?Text=LaptopBE");
             Product p2 = new Product(null, "Smartphone Z Backend", "Última generación de smartphone", 850.00, 22, "https://via.placeholder.com/150/FF0000/FFFFFF?Text=SmartphoneBE");
@@ -34,7 +33,6 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println(">>> Productos de prueba creados.");
         }
 
-        // Crear Usuarios si no existen
         if (userRepository.count() == 0) {
             User admin = new User(null, "admin", passwordEncoder.encode("admin"), User.Role.ADMIN, "Admin Supremo");
             User manager = new User(null, "manager", passwordEncoder.encode("manager"), User.Role.MANAGER, "Jefe de Tienda");

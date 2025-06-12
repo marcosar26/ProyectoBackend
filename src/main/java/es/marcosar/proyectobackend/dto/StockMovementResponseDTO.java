@@ -7,14 +7,14 @@ import java.time.LocalDateTime;
 public class StockMovementResponseDTO {
     public Long id;
     public Long productId;
-    public String productName; // Para mostrar el nombre del producto fácilmente
+    public String productName;
     public StockMovement.MovementType type;
     public Integer quantityChanged;
     public Integer stockBefore;
     public Integer stockAfter;
     public LocalDateTime movementDate;
     public String reason;
-    public String username; // Nombre de usuario que realizó el movimiento
+    public String username;
 
     public StockMovementResponseDTO(StockMovement movement) {
         this.id = movement.getId();
@@ -31,7 +31,7 @@ public class StockMovementResponseDTO {
         if (movement.getUser() != null) {
             this.username = movement.getUser().getUsername();
         } else {
-            this.username = "Sistema"; // O algún valor por defecto si el usuario es null
+            this.username = "Sistema";
         }
     }
 }

@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 public class UserRequestDTO {
     @NotBlank
     public String username;
-    @NotBlank // Para creación, opcional para actualización si no se cambia
+    @NotBlank
     public String password;
     @NotNull
     public User.Role role;

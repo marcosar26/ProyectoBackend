@@ -5,7 +5,7 @@ import java.util.List;
 public class JwtResponse {
     public String token;
     public String type = "Bearer";
-    public Long id; // Opcional: enviar ID del usuario
+    public Long id;
     public String username;
     public List<String> roles;
 

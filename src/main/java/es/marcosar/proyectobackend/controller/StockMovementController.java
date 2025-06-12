@@ -23,13 +23,12 @@ public class StockMovementController {
     @Autowired
     private StockMovementService stockMovementService;
 
-    // Método para convertir StockMovement a DTO
     private StockMovementResponseDTO convertToDTO(StockMovement movement) {
         return new StockMovementResponseDTO(movement);
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')") // Solo Admin y Manager pueden ver todos los movimientos
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public ResponseEntity<List<StockMovementResponseDTO>> getAllStockMovements() {
         List<StockMovementResponseDTO> movementDTOs = stockMovementService.getAllMovements().stream()
                 .map(this::convertToDTO)
@@ -39,7 +38,6 @@ public class StockMovementController {
 
     @GetMapping("/product/{productId}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
-    // O también 'USER' si los usuarios pueden ver el historial de un producto
     public ResponseEntity<List<StockMovementResponseDTO>> getStockMovementsByProductId(@PathVariable Long productId) {
         List<StockMovementResponseDTO> movementDTOs = stockMovementService.getMovementsByProductId(productId).stream()
                 .map(this::convertToDTO)
@@ -50,9 +48,6 @@ public class StockMovementController {
     @GetMapping("/stats/movements-by-type")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public ResponseEntity<List<Map<String, Object>>> getMovementsByTypeLast30Days() {
-        // Necesitarías un método en StockMovementService que agrupe por tipo y cuente
-        // Esto puede ser una consulta JPQL o Criteria API más compleja.
-        // Ejemplo de lo que devolvería el servicio: List<Map<String, Object>> donde cada mapa es {"type": "ENTRADA", "count": 25}
         List<Map<String, Object>> stats = stockMovementService.countMovementsByTypeLastDays(30);
         return ResponseEntity.ok(stats);
     }
@@ -64,7 +59,6 @@ public class StockMovementController {
                 LocalDate.now().minusWeeks(1),
                 LocalDate.now()
         );
-        // El summary podría ser: {"totalEntradas": 50, "totalSalidas": 30}
         return ResponseEntity.ok(summary);
     }
 }

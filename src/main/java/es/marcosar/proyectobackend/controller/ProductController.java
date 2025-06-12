@@ -14,8 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/products") // Ruta base para los productos
-// @CrossOrigin(origins = "http://localhost:4200") // Permitir peticiones desde Angular (desarrollo)
+@RequestMapping("/api/products")
 public class ProductController {
 
     @Autowired
@@ -53,7 +52,7 @@ public class ProductController {
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         if (productService.deleteProduct(id)) {
-            return ResponseEntity.noContent().build(); // 204 No Content
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
     }
@@ -62,13 +61,12 @@ public class ProductController {
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public ResponseEntity<Map<String, Object>> getProductStats() {
         Map<String, Object> stats = new HashMap<>();
-        long totalProducts = productService.countTotalProducts(); // Necesitarás añadir este método a ProductService y ProductRepository
-        long lowStockCount = productService.countLowStockProducts(10); // Productos con stock < 10 (necesitas añadir método)
-        // Podrías añadir más: valor total del inventario, producto más caro/barato, etc.
+        long totalProducts = productService.countTotalProducts();
+        long lowStockCount = productService.countLowStockProducts(10);
 
         stats.put("totalProducts", totalProducts);
         stats.put("lowStockProducts", lowStockCount);
-        // ... más stats
+
         return ResponseEntity.ok(stats);
     }
 }
